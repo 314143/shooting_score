@@ -1,8 +1,15 @@
 package pl.kamil.wyniki_strzeleckie.model;
 
+import lombok.*;
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@ToString
 public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,19 +24,16 @@ public class Score {
         this.score = score;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Score score = (Score) o;
+        return getId() != null && Objects.equals(getId(), score.getId());
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
