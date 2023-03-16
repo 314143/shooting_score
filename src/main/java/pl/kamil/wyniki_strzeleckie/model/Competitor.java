@@ -18,9 +18,12 @@ public class Competitor {
 
     private @Id @GeneratedValue Long id;
     private String name;
+    private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
     private String licenseNumber;
     private String clubName;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "competitor")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ToString.Exclude
     private List<Start> starts = new ArrayList<>();

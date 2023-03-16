@@ -3,6 +3,7 @@ package pl.kamil.wyniki_strzeleckie.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
+import pl.kamil.wyniki_strzeleckie.exceptions.WrongAmountScoresException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ public class Start {
     private Long shotsAmount;
     @ManyToOne
     private Competitor competitor;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ElementCollection
     @ToString.Exclude
-    private List<Score> scores = new ArrayList<>();
+    private List<Integer> scores = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "competition_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -32,19 +33,13 @@ public class Start {
     public Start() {
     }
 
-    public boolean addScore(ArrayList<Integer> scores) {    //TODO: Usuwanie starych wyników
-        if (scores.size() <= this.shotsAmount) {
-            ArrayList<Score> newScores = new ArrayList<>();
-            for (int score :
-                    scores) {
-                newScores.add(new Score(score));
-            }
+    public void addScore(ArrayList<Integer> scores) {
+        if (scores.size() == this.shotsAmount) {
             this.scores.clear();
-            this.scores = newScores;
+            this.scores = scores;
         }
         else
-            return false;
-        return true;
+            throw new WrongAmountScoresException();
     }
 
     @Override

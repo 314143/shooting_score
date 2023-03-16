@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class TooManyScoresAdvice {
     @ResponseBody
-    @ExceptionHandler(TooManyScoresException.class)
+    @ExceptionHandler(WrongAmountScoresException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String TooManyScoresHandler(TooManyScoresException ex) {
+    String TooManyScoresHandler(WrongAmountScoresException ex) {
         return ex.getMessage();
     }
 }

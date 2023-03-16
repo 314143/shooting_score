@@ -33,4 +33,5 @@ public class CompetitorsController {
         startRepository.findByCompetitor_Id(id).forEach(start -> startRepository.deleteById(start.getId()));
         repository.deleteById(id);
     }
+
 }
