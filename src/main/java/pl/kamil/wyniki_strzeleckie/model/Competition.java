@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Objects;
 public class Competition {
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     private String name;
-    private Date date;
+    private LocalDate date;
     @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Start> starts = new ArrayList<>();
