@@ -10,12 +10,11 @@ import pl.kamil.wyniki_strzeleckie.model.CompetitorsRepository;
 import pl.kamil.wyniki_strzeleckie.model.Start;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class CompetitionService {
-    private CompetitionsRepository repository;
+    private final CompetitionsRepository repository;
     private final CompetitorsRepository participantRepository;
 
     public CompetitionService(CompetitionsRepository repository, CompetitorsRepository participantRepository) {

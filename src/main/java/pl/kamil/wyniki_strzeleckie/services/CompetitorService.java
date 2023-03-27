@@ -1,5 +1,6 @@
 package pl.kamil.wyniki_strzeleckie.services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.kamil.wyniki_strzeleckie.exceptions.CompetitorNotFoundException;
 import pl.kamil.wyniki_strzeleckie.exceptions.UserAlreadyExistException;
@@ -7,7 +8,6 @@ import pl.kamil.wyniki_strzeleckie.model.*;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,13 +16,15 @@ import java.util.Set;
 public class CompetitorService {
     private final CompetitorsRepository repository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 //    private final PasswordEncoder passwordEncoder;
 
     public CompetitorService(CompetitorsRepository repository,
-                             RoleRepository roleRepository) {
+                             RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
 //        this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Competitor> getCompetitors() {
@@ -44,7 +46,7 @@ public class CompetitorService {
         }
         Competitor user = new Competitor();
         user.setName(competitorDTO.getFirstName() + " " + competitorDTO.getLastName());
-        user.setPassword(competitorDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(competitorDTO.getPassword()));
         user.setEmail(competitorDTO.getEmail());
         user.setLicenseNumber(competitorDTO.getLicenseNumber());
         user.setClubName(competitorDTO.getClubName());
@@ -78,7 +80,7 @@ public class CompetitorService {
         HashSet<Role> roles = new HashSet<>();
         Competitor competitor = new Competitor();
         competitor.setEmail("user");
-        competitor.setPassword("{bcrypt}$2y$10$8rVq.nIuVpdNdKN7ZdJM.O8okWJnIPVKSTudPfvCM5NWyzxHLQF4O");
+        competitor.setPassword("$2y$10$8rVq.nIuVpdNdKN7ZdJM.O8okWJnIPVKSTudPfvCM5NWyzxHLQF4O");
         competitor.setName("Kamil B");
         competitor.setClubName("KS AGAT");
         competitor.setLicenseNumber("L-123");
@@ -89,7 +91,7 @@ public class CompetitorService {
         Competitor competitor2 = new Competitor();
         HashSet<Role> roles2 = new HashSet<>(savedRoles);
         competitor2.setEmail("admin");
-        competitor2.setPassword(("{bcrypt}$2y$10$8rVq.nIuVpdNdKN7ZdJM.O8okWJnIPVKSTudPfvCM5NWyzxHLQF4O"));
+        competitor2.setPassword(("$2y$10$8rVq.nIuVpdNdKN7ZdJM.O8okWJnIPVKSTudPfvCM5NWyzxHLQF4O"));
         competitor2.setRoles(roles2);
         repository.save(competitor2);
         System.out.println(repository.findAll());

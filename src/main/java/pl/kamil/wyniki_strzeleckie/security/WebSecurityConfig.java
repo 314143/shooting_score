@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -57,31 +59,13 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) throws Exception {
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-//        UserDetails user = User.builder()
-//                        .username("user")
-//                        .password("{noop}pass")
-//                        .roles("USER")
-//                        .build();
-//        UserDetails manager = User.builder()
-//                .username("manager")
-//                .password("{noop}pass")
-//                .roles("MANAGER", "USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("{noop}pass")
-//                .roles("ADMIN", "MANAGER", "USER")
-//                .build();
-//        manager.createUser(admin);
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
         jdbcUserDetailsManager.setUsersByUsernameQuery("SELECT email, password, active FROM competitors WHERE email=?");
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("SELECT competitors.email, role.name " +
